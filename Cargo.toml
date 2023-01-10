@@ -1,0 +1,19 @@
+[package]
+name = "tp1-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.dev]
+panic = "abort"
+opt-level = "s"
+lto = true
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+lto = true
+
+[dependencies]
+avr-device = {git = "https://github.com/marcantoinem/avr-device", branch = "support-for-atmega324pa", features = ["atmega324pa", "rt"]}
