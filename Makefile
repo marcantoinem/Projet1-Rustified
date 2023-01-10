@@ -1,10 +1,18 @@
-EXEC=tp1-rust
-ARCH="avr-atmega324pa"
+PROJECTNAME=tp1-rust
+ARCH=avr
+MCU=atmega324pa
+CARGOCOMMAND=cargo +nightly build -r --target $(ARCH)-$(MCU).json
+HEXROM=$(PROJECTNAME).hex
 
 all *.rs:
-	cargo +nightly build -r
-	avr-objcopy -O ihex target/$(ARCH)/release/$(EXEC).elf $(EXEC).hex
+	$(CARGOCOMMAND)
+	avr-objcopy -O ihex target/$(ARCH)-$(MCU)/release/$(PROJECTNAME).elf $(HEXROM)
+	
+
+install: $(HEXROMTRG)
+	$(CARGOCOMMAND)
+	avrdude -c usbasp -p $(MCU) -P -e -U flash:w:$(HEXROM)
 
 clean:
 	cargo clean
-	rm $(EXEC).hex
+	rm $(PROJECTNAME).hex
