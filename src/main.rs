@@ -1,33 +1,64 @@
 #![no_std]
 #![no_main]
+#![feature(asm_experimental_arch)]
+
+use core::arch::asm;
+use panic_halt as _;
+
+fn busy_loop(mut c: u16) {
+    // Wait for 3+c instruction
+    #[allow(unused_assignments)]
+    unsafe {
+        asm!(
+            "1:",
+            "sbiw {c}, 1",
+            "brne 1b",
+            c = inout(reg_iw) c,
+        );
+    }
+}
+
+// fn sleep(n: u32) {
+//     let mut i = 0;
+//     while i < n {
+//         busy_loop(0xffff);
+//         i += 1;
+//     }
+// }
 
 #[avr_device::entry]
 fn avrmain() -> ! {
     let dp = avr_device::atmega324pa::Peripherals::take().unwrap();
-    dp.PORTA.ddra.write(|w| unsafe { w.bits(0xff) });
-    dp.PORTB.ddrb.write(|w| unsafe { w.bits(0xff) });
-    dp.PORTC.ddrc.write(|w| unsafe { w.bits(0xff) });
-    dp.PORTD.ddrd.write(|w| unsafe { w.bits(0xff) });
-
-    let mut compteur: u32 = 0;
+    dp.PORTA.ddra.write(|w| unsafe { w.bits(0x03) });
+    dp.PORTD.ddrd.write(|w| unsafe { w.bits(0x00) });
     loop {
-        compteur += 1;
-        dp.PORTD.portd.write(|w| unsafe { w.bits(compteur as u8) });
-        dp.PORTC
-            .portc
-            .write(|w| unsafe { w.bits((compteur >> 8) as u8) });
-        dp.PORTB
-            .portb
-            .write(|w| unsafe { w.bits((compteur >> 16) as u8) });
-        dp.PORTA
-            .porta
-            .write(|w| unsafe { w.bits((compteur >> 24) as u8) });
+        let read = dp.PORTD.pind.read().pd2().bit_is_set();
+        busy_loop(0x0fff);
+        let debounced_read = read & dp.PORTD.pind.read().pd2().bit_is_set();
+        let bits = ((debounced_read as u8) << 1) + !debounced_read as u8;
+        dp.PORTA.porta.write(|w| unsafe { w.bits(bits) });
     }
 }
 
-use core::panic::PanicInfo;
-
-#[panic_handler]
-fn panic(_panic: &PanicInfo<'_>) -> ! {
-    loop {}
-}
+/*
+ * Table vérité
+ * AB -> CD
+ * 00 -> 10
+ * 01 -> 01
+ * 10 -> XX
+ * 11 -> XX
+ *
+ * C
+ * A\B | 0 | 1 |
+ *  0  | 1 | 0 |
+ *  1  | X | X |
+ * C=B'
+ *
+ * D
+ * A\B | 0 | 1 |
+ *  0  | 0 | 1 |
+ *  1  | X | X |
+ * D=B
+ *
+ * CD = B >> 2 + B'
+ */

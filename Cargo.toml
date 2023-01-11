@@ -17,3 +17,4 @@ lto = true
 
 [dependencies]
 avr-device = {git = "https://github.com/marcantoinem/avr-device", branch = "support-for-atmega324pa", features = ["atmega324pa", "rt"]}
+panic-halt = "0.2.0"

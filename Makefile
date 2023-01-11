@@ -8,11 +8,11 @@ all *.rs:
 	$(CARGOCOMMAND)
 	avr-objcopy -O ihex target/$(ARCH)-$(MCU)/release/$(PROJECTNAME).elf $(HEXROM)
 	
-
 install: $(HEXROMTRG)
 	$(CARGOCOMMAND)
+	avr-objcopy -O ihex target/$(ARCH)-$(MCU)/release/$(PROJECTNAME).elf $(HEXROM)
 	avrdude -c usbasp -p $(MCU) -P -e -U flash:w:$(HEXROM)
 
 clean:
 	cargo clean
-	rm $(PROJECTNAME).hex
+	rm $(HEXROM)
