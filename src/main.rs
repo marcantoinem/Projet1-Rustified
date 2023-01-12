@@ -3,7 +3,8 @@
 #![feature(asm_experimental_arch)]
 
 use atmega_hal as hal;
-use hal::port::{mode::Output, Pin, PA0, PA1};
+use hal::port::PinOps;
+use hal::port::{mode::Output, Pin};
 use hal::prelude::*;
 use panic_halt as _;
 
@@ -13,15 +14,19 @@ enum Color {
 }
 
 impl Color {
-    fn set_del(self, pina0: &mut Pin<Output, PA0>, pina1: &mut Pin<Output, PA1>) {
+    fn set_del<P1, P2>(self, pina0: &mut Pin<Output, P1>, pina1: &mut Pin<Output, P2>)
+    where
+        P1: PinOps,
+        P2: PinOps,
+    {
         match self {
             Color::RED => {
                 pina0.set_low();
-                pina1.set_high()
+                pina1.set_high();
             }
             Color::GREEN => {
                 pina0.set_high();
-                pina1.set_low()
+                pina1.set_low();
             }
         }
     }
@@ -39,7 +44,7 @@ fn main() -> ! {
 
     loop {
         let first_read = pind2.is_high();
-        clock.delay_ms(10u16);
+        clock.delay_ms(10_u16);
         let second_read = pind2.is_high();
         match first_read & second_read {
             true => Color::GREEN.set_del(&mut pina0, &mut pina1),
