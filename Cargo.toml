@@ -16,5 +16,13 @@ opt-level = "s"
 lto = true
 
 [dependencies]
-avr-device = {git = "https://github.com/marcantoinem/avr-device", branch = "support-for-atmega324pa", features = ["atmega324pa", "rt"]}
 panic-halt = "0.2.0"
+
+[dependencies.atmega-hal]
+path = "src/avr-hal/mcu/atmega-hal"
+features = ["atmega324pa", "device-selected", "rt"]
+
+[dependencies.avr-device]
+git = "https://github.com/marcantoinem/avr-device"
+rev = "684d9afd63a26ad053a8c93bec959c2128d1c05e"
+features = ["atmega324pa", "device-selected", "rt"]

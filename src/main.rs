@@ -2,63 +2,48 @@
 #![no_main]
 #![feature(asm_experimental_arch)]
 
-use core::arch::asm;
+use atmega_hal as hal;
+use hal::port::{mode::Output, Pin, PA0, PA1};
+use hal::prelude::*;
 use panic_halt as _;
 
-fn busy_loop(mut c: u16) {
-    // Wait for 3+c instruction
-    #[allow(unused_assignments)]
-    unsafe {
-        asm!(
-            "1:",
-            "sbiw {c}, 1",
-            "brne 1b",
-            c = inout(reg_iw) c,
-        );
-    }
+enum Color {
+    RED,
+    GREEN,
 }
 
-// fn sleep(n: u32) {
-//     let mut i = 0;
-//     while i < n {
-//         busy_loop(0xffff);
-//         i += 1;
-//     }
-// }
+impl Color {
+    fn set_del(self, pina0: &mut Pin<Output, PA0>, pina1: &mut Pin<Output, PA1>) {
+        match self {
+            Color::RED => {
+                pina0.set_low();
+                pina1.set_high()
+            }
+            Color::GREEN => {
+                pina0.set_high();
+                pina1.set_low()
+            }
+        }
+    }
+}
 
 #[avr_device::entry]
-fn avrmain() -> ! {
-    let dp = avr_device::atmega324pa::Peripherals::take().unwrap();
-    dp.PORTA.ddra.write(|w| unsafe { w.bits(0x03) });
-    dp.PORTD.ddrd.write(|w| unsafe { w.bits(0x00) });
+fn main() -> ! {
+    let dp = hal::Peripherals::take().unwrap();
+    let pins = hal::pins!(dp);
+    let mut pina0 = pins.pa0.into_output();
+    let mut pina1 = pins.pa1.into_output();
+    let pind2 = pins.pd2.into_floating_input();
+
+    let mut clock = hal::delay::Delay::<hal::clock::MHz8>::new();
+
     loop {
-        let read = dp.PORTD.pind.read().pd2().bit_is_set();
-        busy_loop(0x0fff);
-        let debounced_read = read & dp.PORTD.pind.read().pd2().bit_is_set();
-        let bits = ((debounced_read as u8) << 1) + !debounced_read as u8;
-        dp.PORTA.porta.write(|w| unsafe { w.bits(bits) });
+        let first_read = pind2.is_high();
+        clock.delay_ms(10u16);
+        let second_read = pind2.is_high();
+        match first_read & second_read {
+            true => Color::GREEN.set_del(&mut pina0, &mut pina1),
+            false => Color::RED.set_del(&mut pina0, &mut pina1),
+        }
     }
 }
-
-/*
- * Table vérité
- * AB -> CD
- * 00 -> 10
- * 01 -> 01
- * 10 -> XX
- * 11 -> XX
- *
- * C
- * A\B | 0 | 1 |
- *  0  | 1 | 0 |
- *  1  | X | X |
- * C=B'
- *
- * D
- * A\B | 0 | 1 |
- *  0  | 0 | 1 |
- *  1  | X | X |
- * D=B
- *
- * CD = B >> 2 + B'
- */
