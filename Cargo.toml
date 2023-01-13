@@ -7,20 +7,25 @@ edition = "2021"
 
 [profile.dev]
 panic = "abort"
-opt-level = "s"
+opt-level = "z"
 lto = true
+codegen-units = 1
 
 [profile.release]
 panic = "abort"
-opt-level = "s"
+opt-level = "z"
 lto = true
+codegen-units = 1
 
 [dependencies]
-panic-halt = "0.2.0"
+panic-abort = "0.3.2"
 
 [dependencies.atmega-hal]
 path = "src/avr-hal/mcu/atmega-hal"
 features = ["atmega324pa", "device-selected", "rt"]
+
+[dependencies.avr-hal-generic]
+path = "src/avr-hal/avr-hal-generic"
 
 [dependencies.avr-device]
 git = "https://github.com/marcantoinem/avr-device"
