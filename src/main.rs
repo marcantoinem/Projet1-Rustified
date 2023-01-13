@@ -2,6 +2,8 @@
 #![no_main]
 #![feature(asm_experimental_arch)]
 
+mod music;
+
 use atmega_hal as hal;
 use hal::clock::MHz8;
 use hal::delay::Delay;
@@ -71,6 +73,9 @@ fn make_sound<P1, P2>(
     }
 }
 
+use music::TETRIS_FREQUENCIES;
+use music::TETRIS_NOTES;
+
 #[avr_device::entry]
 fn sound() -> ! {
     let dp = hal::Peripherals::take().unwrap();
@@ -79,14 +84,26 @@ fn sound() -> ! {
     let mut pina0 = pins.pa0.into_output();
     let mut pina1 = pins.pa1.into_output();
     let mut clock = hal::delay::Delay::<MHz8>::new();
-    let notes = [
-        659, 587, 523, 587, 659, 783, 783, 523, 523, 587, 587, 659, 587, 523, 587, 659, 783, 783,
-        659, 523, 523, 523,
-    ];
+    const TEMPO: u32 = 104;
+    const TIME_WHOLE_NOTE: u32 = (120000 as u32 / TEMPO) as u32;
     loop {
-        for note in notes {
-            make_sound(&mut clock, &mut pina0, &mut pina1, note as u16, 200);
-            clock.delay_ms(100u16);
+        // Inspired by https://github.com/robsoncouto/arduino-songs
+        for (note, divider) in TETRIS_NOTES {
+            let note_duration = if divider >= 0 {
+                TIME_WHOLE_NOTE / divider as u32
+            } else {
+                ((TIME_WHOLE_NOTE as f32 / (-divider) as f32) * 1.5) as u32
+            };
+            let sound_duration = (note_duration as f32 * 0.9) as u32;
+            make_sound(
+                &mut clock,
+                &mut pina0,
+                &mut pina1,
+                TETRIS_FREQUENCIES[note as usize],
+                sound_duration,
+            );
+            let sleep_duration = (note_duration as f32 * 0.1) as u16;
+            clock.delay_ms(sleep_duration);
         }
         clock.delay_ms(1000u16);
     }
