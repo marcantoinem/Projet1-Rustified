@@ -64,7 +64,31 @@ fn make_sound<P1, P2>(
     P1: PinOps,
     P2: PinOps,
 {
-    let waiting_time = (1.0 / (frequency as f32) * 1_000_000.0) as u32;
+    // let mut frequency = frequency;
+    if frequency == 0 {
+        return;
+    } else if frequency <= 160 {
+        let natural_frequency = 4100;
+        let waiting_time = 1_000_000 / natural_frequency as u32;
+        let number_of_cycle = time_ms as u32 * natural_frequency as u32 / 2000;
+        let ratio_to_skip = natural_frequency / frequency;
+        for n in 0..number_of_cycle {
+            if n % ratio_to_skip as u32 == 0 {
+                clock.delay_us(2 * waiting_time);
+                continue;
+            }
+            pin0.set_high();
+            pin1.set_low();
+            clock.delay_us(waiting_time);
+            pin0.set_low();
+            pin1.set_high();
+            clock.delay_us(waiting_time);
+        }
+        return;
+        // let multiplier = 200 / frequency;
+        // frequency *= multiplier;
+    }
+    let waiting_time = 1_000_000 / frequency as u32;
     let number_of_cycle = time_ms as u32 * frequency as u32 / 2000;
     for _ in 0..number_of_cycle {
         pin0.set_high();
@@ -861,6 +885,101 @@ impl Music {
         (4, 8),
         (16, 8),
         (5, -2),
+    ];
+    pub const IMPERIAL_MARCH: Song<[u16; 14], [(u8, i8); 86]> = Song {
+        frequencies: Self::IMPERIAL_FREQUENCIES,
+        notes: Self::IMPERIAL_NOTES,
+    };
+    const IMPERIAL_FREQUENCIES: [u16; 14] = [
+        40, 349, 0, 523, 659, 698, 80, 831, 784, 62, 587, 54, 494, 415,
+    ];
+    const IMPERIAL_NOTES: [(u8, i8); 86] = [
+        (0, -4),
+        (0, -4),
+        (0, 16),
+        (0, 16),
+        (0, 16),
+        (0, 16),
+        (1, 8),
+        (2, 8),
+        (0, -4),
+        (0, -4),
+        (0, 16),
+        (0, 16),
+        (0, 16),
+        (0, 16),
+        (1, 8),
+        (2, 8),
+        (0, 4),
+        (0, 4),
+        (0, 4),
+        (1, -8),
+        (3, 16),
+        (0, 4),
+        (1, -8),
+        (3, 16),
+        (0, 2),
+        (4, 4),
+        (4, 4),
+        (4, 4),
+        (5, -8),
+        (3, 16),
+        (0, 4),
+        (1, -8),
+        (3, 16),
+        (0, 2),
+        (6, 4),
+        (0, -8),
+        (0, 16),
+        (6, 4),
+        (7, -8),
+        (8, 16),
+        (9, 16),
+        (10, 16),
+        (9, 8),
+        (2, 8),
+        (0, 8),
+        (9, 4),
+        (10, -8),
+        (11, 16),
+        (3, 16),
+        (12, 16),
+        (3, 16),
+        (2, 8),
+        (1, 8),
+        (13, 4),
+        (1, -8),
+        (0, -16),
+        (3, 4),
+        (0, -8),
+        (3, 16),
+        (4, 2),
+        (6, 4),
+        (0, -8),
+        (0, 16),
+        (6, 4),
+        (7, -8),
+        (8, 16),
+        (9, 16),
+        (10, 16),
+        (9, 8),
+        (2, 8),
+        (0, 8),
+        (9, 4),
+        (10, -8),
+        (11, 16),
+        (3, 16),
+        (12, 16),
+        (3, 16),
+        (2, 8),
+        (1, 8),
+        (13, 4),
+        (1, -8),
+        (0, -16),
+        (0, 4),
+        (1, -8),
+        (3, 16),
+        (0, 2),
     ];
     pub fn metro_ringtone<P1, P2>(
         clock: &mut Delay<MHz8>,

@@ -5,6 +5,7 @@ version = 3
 [[package]]
 name = "atmega-hal"
 version = "0.1.0"
+source = "git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2#42cc6b9414175ae443841125270efa4e127a97d2"
 dependencies = [
  "avr-device",
  "avr-hal-generic",
@@ -34,6 +35,7 @@ dependencies = [
 [[package]]
 name = "avr-hal-generic"
 version = "0.1.0"
+source = "git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2#42cc6b9414175ae443841125270efa4e127a97d2"
 dependencies = [
  "avr-device",
  "cfg-if 0.1.10",
@@ -153,7 +155,6 @@ name = "tp1-rust"
 version = "0.1.0"
 dependencies = [
  "atmega-hal",
- "avr-device",
  "avr-hal-generic",
  "panic-abort",
 ]

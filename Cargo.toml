@@ -21,13 +21,11 @@ codegen-units = 1
 panic-abort = "0.3.2"
 
 [dependencies.atmega-hal]
-path = "src/avr-hal/mcu/atmega-hal"
+git = "https://github.com/marcantoinem/avr-hal"
+rev = "42cc6b9414175ae443841125270efa4e127a97d2"
 features = ["atmega324pa", "device-selected", "rt"]
 
 [dependencies.avr-hal-generic]
-path = "src/avr-hal/avr-hal-generic"
+git = "https://github.com/marcantoinem/avr-hal"
+rev = "42cc6b9414175ae443841125270efa4e127a97d2"
 
-[dependencies.avr-device]
-git = "https://github.com/marcantoinem/avr-device"
-rev = "684d9afd63a26ad053a8c93bec959c2128d1c05e"
-features = ["atmega324pa", "device-selected", "rt"]
