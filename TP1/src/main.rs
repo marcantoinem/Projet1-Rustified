@@ -1,14 +1,10 @@
 #![no_std]
 #![no_main]
-#![feature(asm_experimental_arch, unsize)]
-
-mod device;
-mod music;
 
 use atmega_hal as hal;
 use hal::clock::MHz8;
 use hal::prelude::*;
-use music::Music;
+use inf1900_robot_hal::music::Music;
 use panic_abort as _;
 
 #[hal::entry]
@@ -22,7 +18,7 @@ fn sound() -> ! {
 
     loop {
         // Inspired by https://github.com/robsoncouto/arduino-songs
-        Music::TETRIS.play(&mut clock, &mut pina0, &mut pina1);
+        Music::TETRIS.play(&mut clock, &mut pina0, &mut pina1, 104);
         clock.delay_ms(1000u16);
     }
 }

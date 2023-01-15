@@ -1,4 +1,4 @@
-use atmega_hal as hal;
+pub use atmega_hal as hal;
 use hal::{
     clock::MHz8,
     delay::Delay,
@@ -9,25 +9,6 @@ use hal::{
     prelude::*,
     simple_pwm::Timer1Pwm,
 };
-
-const TEMPO: u32 = 104;
-const TIME_WHOLE_NOTE: u32 = (240000 as u32 / TEMPO) as u32;
-
-pub unsafe trait FixedSizeArray<T> {
-    fn as_slice(&self) -> &[T];
-    fn as_mut_slice(&mut self) -> &mut [T];
-}
-
-unsafe impl<T, A: core::marker::Unsize<[T]>> FixedSizeArray<T> for A {
-    #[inline]
-    fn as_slice(&self) -> &[T] {
-        self
-    }
-    #[inline]
-    fn as_mut_slice(&mut self) -> &mut [T] {
-        self
-    }
-}
 
 fn make_sound_pwm(
     clock: &mut Delay<MHz8>,
@@ -99,27 +80,29 @@ fn make_sound<P1, P2>(
         clock.delay_us(waiting_time);
     }
 }
-pub struct Song<T: FixedSizeArray<u16>, U: FixedSizeArray<(u8, i8)>> {
-    frequencies: T,
-    notes: U,
+pub struct Song<const N1: usize, const N2: usize> {
+    frequencies: [u16; N1],
+    notes: [(u8, i8); N2],
 }
 
 #[allow(unused)]
-impl<T: FixedSizeArray<u16>, U: FixedSizeArray<(u8, i8)>> Song<T, U> {
+impl<const N1: usize, const N2: usize> Song<N1, N2> {
     pub fn play<P1, P2>(
         &self,
         clock: &mut Delay<MHz8>,
         pin0: &mut Pin<Output, P1>,
         pin1: &mut Pin<Output, P2>,
+        tempo: u32,
     ) where
         P1: PinOps,
         P2: PinOps,
     {
+        let time_whole_note: u32 = (240000 as u32 / tempo);
         for (note, divider) in self.notes.as_slice() {
             let note_duration = if divider >= &0 {
-                TIME_WHOLE_NOTE / *divider as u32
+                time_whole_note / *divider as u32
             } else {
-                ((TIME_WHOLE_NOTE as f32 / (-divider) as f32) * 1.5) as u32
+                ((time_whole_note as f32 / (-divider) as f32) * 1.5) as u32
             };
             let sound_duration = (note_duration as f32 * 0.9) as u32;
             let frequency = self.frequencies.as_slice()[*note as usize];
@@ -128,17 +111,19 @@ impl<T: FixedSizeArray<u16>, U: FixedSizeArray<(u8, i8)>> Song<T, U> {
             clock.delay_ms(sleep_duration);
         }
     }
-    pub fn play_pwm(
+    pub fn play_pwm<const TEMPO: usize>(
         &self,
         clock: &mut Delay<MHz8>,
         pina0: &mut Pin<PwmOutput<Timer1Pwm>, PD4>,
         pina1: &mut Pin<PwmOutput<Timer1Pwm>, PD5>,
+        tempo: u32,
     ) {
+        let time_whole_note: u32 = (240000 as u32 / tempo);
         for (note, divider) in self.notes.as_slice() {
             let note_duration = if divider >= &0 {
-                TIME_WHOLE_NOTE / *divider as u32
+                time_whole_note / *divider as u32
             } else {
-                ((TIME_WHOLE_NOTE as f32 / (-divider) as f32) * 1.5) as u32
+                ((time_whole_note as f32 / (-divider) as f32) * 1.5) as u32
             };
             let sound_duration = (note_duration as f32 * 0.9) as u32;
             let frequency = self.frequencies.as_slice()[*note as usize];
@@ -151,9 +136,8 @@ impl<T: FixedSizeArray<u16>, U: FixedSizeArray<(u8, i8)>> Song<T, U> {
 
 pub struct Music();
 
-#[allow(unused)]
 impl Music {
-    pub const TETRIS: Song<[u16; 11], [(u8, i8); 99]> = Song {
+    pub const TETRIS: Song<11, 99> = Song {
         frequencies: Self::TETRIS_FREQUENCIES,
         notes: Self::TETRIS_NOTES,
     };
@@ -260,7 +244,7 @@ impl Music {
         (6, 2),
         (10, 2),
     ];
-    pub const MII_CHANNEL: Song<[u16; 22], [(u8, i8); 286]> = Song {
+    pub const MII_CHANNEL: Song<22, 286> = Song {
         frequencies: Self::MII_FREQUENCIES,
         notes: Self::MII_NOTES,
     };
@@ -556,7 +540,7 @@ impl Music {
         (12, 4),
         (1, 8),
     ];
-    pub const SUPER_MARIO_BROS: Song<[u16; 17], [(u8, i8); 321]> = Song {
+    pub const SUPER_MARIO_BROS: Song<17, 321> = Song {
         frequencies: Self::MARIO_FREQUENCIES,
         notes: Self::MARIO_NOTES,
     };
@@ -886,7 +870,7 @@ impl Music {
         (16, 8),
         (5, -2),
     ];
-    pub const IMPERIAL_MARCH: Song<[u16; 14], [(u8, i8); 86]> = Song {
+    pub const IMPERIAL_MARCH: Song<14, 86> = Song {
         frequencies: Self::IMPERIAL_FREQUENCIES,
         notes: Self::IMPERIAL_NOTES,
     };
