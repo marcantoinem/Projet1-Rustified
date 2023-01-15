@@ -11,11 +11,9 @@ use panic_abort as _;
 fn sound() -> ! {
     let dp = hal::Peripherals::take().unwrap();
     let pins = hal::pins!(dp);
-
     let mut clock = hal::delay::Delay::<MHz8>::new();
     let mut pina0 = pins.pa0.into_output();
     let mut pina1 = pins.pa1.into_output();
-
     loop {
         // Inspired by https://github.com/robsoncouto/arduino-songs
         Music::TETRIS.play(&mut clock, &mut pina0, &mut pina1, 104);
