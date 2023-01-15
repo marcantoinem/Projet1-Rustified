@@ -38,21 +38,3 @@ where
     let second_read = pin.is_high();
     first_read & second_read
 }
-
-// fn tp1() -> ! {
-//     let dp = hal::Peripherals::take().unwrap();
-//     let pins = hal::pins!(dp);
-//     let mut pina0 = pins.pa0.into_output();
-//     let mut pina1 = pins.pa1.into_output();
-
-//     let pind2 = pins.pd2.into_floating_input();
-
-//     let mut clock = hal::delay::Delay::<MHz8>::new();
-
-//     loop {
-//         match _read_input_debounced(&mut clock, &pind2) {
-//             true => _set_twoway_del(&mut pina0, &mut pina1, _Color::GREEN),
-//             false => _set_twoway_del(&mut pina0, &mut pina1, _Color::RED),
-//         }
-//     }
-// }
