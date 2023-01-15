@@ -159,7 +159,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tp1-rust"
+name = "tptest-rust"
 version = "0.1.0"
 dependencies = [
  "atmega-hal",

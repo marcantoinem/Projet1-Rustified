@@ -1,5 +1,5 @@
 [package]
-name = "tptest-rust"
+name = "tp2-rust"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,13 +7,13 @@ edition = "2021"
 
 [profile.dev]
 panic = "abort"
-opt-level = "z" # Optimize for size.
+opt-level = 3 # Optimize for size.
 lto = true # Really important to boil down abstractions
 codegen-units = 1
 
 [profile.release]
 panic = "abort"
-opt-level = "z" # Optimize for size.
+opt-level = 3 # Optimize for size.
 lto = true # Really important to boil down abstractions
 codegen-units = 1
 
