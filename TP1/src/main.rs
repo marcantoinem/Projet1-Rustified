@@ -16,8 +16,8 @@ fn sound() -> ! {
     let pind2 = pins.pd2.into_floating_input();
     loop {
         match read_input_debounced(&mut clock, &pind2) {
-            true => set_twoway_del(&mut pina0, &mut pina1, Color::GREEN),
-            false => set_twoway_del(&mut pina0, &mut pina1, Color::RED),
+            true => set_twoway_del(&mut pina0, &mut pina1, Color::Amber),
+            false => set_twoway_del(&mut pina0, &mut pina1, Color::Red),
         }
     }
 }

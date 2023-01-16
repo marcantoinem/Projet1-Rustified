@@ -5,8 +5,10 @@ use hal::port::mode::{Floating, Input, Output};
 use hal::port::{Pin, PinOps};
 use hal::prelude::*;
 pub enum Color {
-    RED,
-    GREEN,
+    None,
+    Red,
+    Green,
+    Amber,
 }
 
 pub fn set_twoway_del<P1, P2>(
@@ -18,13 +20,26 @@ pub fn set_twoway_del<P1, P2>(
     P2: PinOps,
 {
     match color {
-        Color::RED => {
+        Color::None => {
+            pina0.set_low();
+            pina1.set_low();
+        }
+        Color::Red => {
             pina0.set_low();
             pina1.set_high();
         }
-        Color::GREEN => {
+        Color::Green => {
             pina0.set_high();
             pina1.set_low();
+        }
+        Color::Amber => {
+            let mut clock = hal::delay::Delay::<MHz8>::new();
+            pina0.set_high();
+            pina1.set_low();
+            clock.delay_ms(10u16);
+            pina0.set_low();
+            pina1.set_high();
+            clock.delay_ms(10u16);
         }
     }
 }
