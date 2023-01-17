@@ -13,6 +13,7 @@ enum StateButton {
     Released,
 }
 
+#[hal::entry]
 fn _problem1() -> ! {
     let dp = hal::Peripherals::take().unwrap();
     let pins = hal::pins!(dp);
@@ -50,7 +51,6 @@ enum StateProblem2 {
     ThirdPress,
 }
 
-#[hal::entry]
 fn _problem2() -> ! {
     let dp = hal::Peripherals::take().unwrap();
     let pins = hal::pins!(dp);
