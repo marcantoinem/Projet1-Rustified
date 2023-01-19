@@ -16,7 +16,7 @@ fn sound() -> ! {
     let mut pina1 = pins.pa1.into_output();
     loop {
         // Inspired by https://github.com/robsoncouto/arduino-songs
-        Music::HARRYPOTTER.play(&mut clock, &mut pina0, &mut pina1, 103);
+        Music::NEVERGONNAGIVEYOUUP.play(&mut clock, &mut pina0, &mut pina1, 113);
         clock.delay_ms(1000u16);
     }
 }
