@@ -1,0 +1,33 @@
+[package]
+name = "tp3-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.dev]
+panic = "abort"
+opt-level = 3 # Optimize for size.
+lto = true # Really important to boil down abstractions
+codegen-units = 1
+
+[profile.release]
+panic = "abort"
+opt-level = 'z' # Optimize for size.
+lto = true # Really important to boil down abstractions
+codegen-units = 1
+
+[dependencies]
+panic-abort = "0.3.2"
+
+[dependencies.atmega-hal]
+git = "https://github.com/marcantoinem/avr-hal"
+rev = "42cc6b9414175ae443841125270efa4e127a97d2"
+features = ["atmega324pa", "device-selected", "rt"]
+
+[dependencies.avr-hal-generic]
+git = "https://github.com/marcantoinem/avr-hal"
+rev = "42cc6b9414175ae443841125270efa4e127a97d2"
+
+[dependencies.inf1900-robot-hal]
+path = "../inf1900-robot-hal"

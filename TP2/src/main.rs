@@ -7,7 +7,7 @@ use hal::prelude::*;
 use inf1900_robot_hal::device::{read_input_debounced, set_twoway_del, Color};
 use panic_abort as _;
 
-enum StateButton {
+enum _StateButton {
     Wait,
     Pressed,
     Released,
@@ -21,15 +21,15 @@ fn _problem1() -> ! {
     let mut pina0 = pins.pa0.into_output();
     let mut pina1 = pins.pa1.into_output();
     let pind2 = pins.pd2.into_floating_input();
-    let mut state = StateButton::Wait;
+    let mut state = _StateButton::Wait;
     let mut counter = 0;
     loop {
         state = match (&state, read_input_debounced(&mut clock, &pind2)) {
-            (StateButton::Wait, true) => StateButton::Pressed,
-            (StateButton::Pressed, false) => StateButton::Released,
-            (StateButton::Released, _) => {
+            (_StateButton::Wait, true) => _StateButton::Pressed,
+            (_StateButton::Pressed, false) => _StateButton::Released,
+            (_StateButton::Released, _) => {
                 counter += 1;
-                StateButton::Wait
+                _StateButton::Wait
             }
             (_, _) => state,
         };

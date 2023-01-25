@@ -1,2 +1,6 @@
 */target
 *.hex
+.idea
+.vscode
+*.lock
+.xml

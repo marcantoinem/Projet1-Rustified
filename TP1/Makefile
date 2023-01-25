@@ -5,7 +5,7 @@ CARGOEXEC=/home/$(USER)/.cargo/bin/cargo
 CARGOCOMMAND=$(CARGOEXEC) +nightly build -r --target $(ARCH)-$(MCU).json
 HEXROM=$(PROJECTNAME).hex
 
-.PHONY: all, install, clean
+.PHONY: all, clean
 
 all:
 	$(CARGOCOMMAND)

@@ -1,11 +1,11 @@
-PROJECTNAME=tp1-rust
+PROJECTNAME=tp2-rust
 ARCH=avr
 MCU=atmega324pa
 CARGOEXEC=/home/$(USER)/.cargo/bin/cargo
 CARGOCOMMAND=$(CARGOEXEC) +nightly build -r --target $(ARCH)-$(MCU).json
 HEXROM=$(PROJECTNAME).hex
 
-.PHONY: all, install, clean
+.PHONY: all, clean
 
 all:
 	$(CARGOCOMMAND)
