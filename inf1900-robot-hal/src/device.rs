@@ -44,12 +44,12 @@ pub fn set_twoway_del<P1, P2>(
     }
 }
 
-pub fn read_input_debounced<PIN>(clock: &mut Delay<MHz8>, pin: &Pin<Input<Floating>, PIN>) -> bool
+pub fn read_input<PIN>(pin: &Pin<Input<Floating>, PIN>) -> bool
 where
     PIN: PinOps,
 {
     let first_read = pin.is_high();
-    clock.delay_ms(10_u16);
+    Delay::<MHz8>::new().delay_ms(10_u16);
     let second_read = pin.is_high();
     first_read & second_read
 }

@@ -1,5 +1,5 @@
 [package]
-name = "tp3-rust"
+name = "tp4-rust"
 version = "0.1.0"
 edition = "2021"
 
@@ -22,12 +22,16 @@ panic-abort = "0.3.2"
 
 [dependencies.atmega-hal]
 git = "https://github.com/marcantoinem/avr-hal"
-rev = "42cc6b9414175ae443841125270efa4e127a97d2"
+rev = "b30015b6b05c1bde68277d002bb197f193895998"
 features = ["atmega324pa", "device-selected", "rt"]
 
 [dependencies.avr-hal-generic]
 git = "https://github.com/marcantoinem/avr-hal"
-rev = "42cc6b9414175ae443841125270efa4e127a97d2"
+rev = "b30015b6b05c1bde68277d002bb197f193895998"
+
+[dependencies.avr-device]
+git = "https://github.com/marcantoinem/avr-device"
+rev = "a6e1e2b8ddc03ed4e35d0bba7a1645762eeff32e"
 
 [dependencies.inf1900-robot-hal]
 path = "../inf1900-robot-hal"

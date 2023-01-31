@@ -4,7 +4,7 @@
 use atmega_hal as hal;
 use hal::clock::MHz8;
 use hal::prelude::*;
-use inf1900_robot_hal::device::{read_input_debounced, set_twoway_del, Color};
+use inf1900_robot_hal::device::{read_input, set_twoway_del, Color};
 use panic_abort as _;
 
 enum StateButton {
@@ -24,7 +24,7 @@ fn problem1() -> ! {
     let mut state = StateButton::Wait;
     let mut counter = 0;
     loop {
-        state = match (&state, read_input_debounced(&mut clock, &pind2)) {
+        state = match (&state, read_input(&pind2)) {
             (StateButton::Wait, true) => StateButton::Pressed,
             (StateButton::Pressed, false) => StateButton::Released,
             (StateButton::Released, _) => {
