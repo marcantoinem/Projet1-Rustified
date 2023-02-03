@@ -22,10 +22,10 @@ fn main() -> ! {
     let dp = hal::Peripherals::take().unwrap();
     let pins = hal::pins!(dp);
 
-    let timer0 = Timer1Pwm::new(dp.TC1, Prescaler::Prescale8);
+    let timer1 = Timer1Pwm::new(dp.TC1, Prescaler::Prescale8);
 
-    let mut pd4 = pins.pd4.into_output().into_pwm(&timer0);
-    let mut pd5 = pins.pd5.into_output().into_pwm(&timer0);
+    let mut pd4 = pins.pd4.into_output().into_pwm(&timer1);
+    let mut pd5 = pins.pd5.into_output().into_pwm(&timer1);
     pd4.enable();
     pd5.enable();
 
