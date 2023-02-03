@@ -2,13 +2,14 @@ PROJECTNAME=tp4-rust
 ARCH=avr
 MCU=atmega324pa
 CARGOEXEC=/home/$(USER)/.cargo/bin/cargo
-HEXROM=$(PROJECTNAME).hex
+
 
 .PHONY: all, build, clean, install
 
 PROBLEMNUM := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(PROBLEMNUM):;@:)
 
+HEXROM=$(PROJECTNAME)-$(PROBLEMNUM).hex
 
 CARGOCOMMAND=$(CARGOEXEC) +nightly build -r --target $(ARCH)-$(MCU).json --bin $(PROBLEMNUM)
 
@@ -26,4 +27,4 @@ install: $(HEXROMTRG)
 
 clean:
 	$(CARGOEXEC) clean
-	rm $(HEXROM)
+	rm *.hex

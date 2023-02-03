@@ -12,6 +12,7 @@
     "position-independent-executables": false,
     "exe-suffix": ".elf",
     "eh-frame-header": false,
+    "max-atomic-width": 0,
     "pre-link-args": {
         "gcc": [
             "-mmcu=atmega324pa"

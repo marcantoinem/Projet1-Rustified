@@ -4,6 +4,8 @@ use hal::delay::Delay;
 use hal::port::mode::{Floating, Input, Output};
 use hal::port::{Pin, PinOps};
 use hal::prelude::*;
+
+#[derive(Copy, Clone)]
 pub enum Color {
     None,
     Red,

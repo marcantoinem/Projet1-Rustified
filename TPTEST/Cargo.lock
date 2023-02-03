@@ -5,30 +5,10 @@ version = 3
 [[package]]
 name = "atmega-hal"
 version = "0.1.0"
-source = "git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2#42cc6b9414175ae443841125270efa4e127a97d2"
-dependencies = [
- "avr-device 0.5.0 (git+https://github.com/marcantoinem/avr-device?rev=684d9afd63a26ad053a8c93bec959c2128d1c05e)",
- "avr-hal-generic 0.1.0 (git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2)",
-]
-
-[[package]]
-name = "atmega-hal"
-version = "0.1.0"
 source = "git+https://github.com/marcantoinem/avr-hal?rev=b30015b6b05c1bde68277d002bb197f193895998#b30015b6b05c1bde68277d002bb197f193895998"
 dependencies = [
- "avr-device 0.5.0 (git+https://github.com/marcantoinem/avr-device?rev=a6e1e2b8ddc03ed4e35d0bba7a1645762eeff32e)",
- "avr-hal-generic 0.1.0 (git+https://github.com/marcantoinem/avr-hal?rev=b30015b6b05c1bde68277d002bb197f193895998)",
-]
-
-[[package]]
-name = "avr-device"
-version = "0.5.0"
-source = "git+https://github.com/marcantoinem/avr-device?rev=684d9afd63a26ad053a8c93bec959c2128d1c05e#684d9afd63a26ad053a8c93bec959c2128d1c05e"
-dependencies = [
- "avr-device-macros 0.5.0 (git+https://github.com/marcantoinem/avr-device?rev=684d9afd63a26ad053a8c93bec959c2128d1c05e)",
- "bare-metal",
- "cfg-if 1.0.0",
- "vcell",
+ "avr-device",
+ "avr-hal-generic",
 ]
 
 [[package]]
@@ -36,20 +16,10 @@ name = "avr-device"
 version = "0.5.0"
 source = "git+https://github.com/marcantoinem/avr-device?rev=a6e1e2b8ddc03ed4e35d0bba7a1645762eeff32e#a6e1e2b8ddc03ed4e35d0bba7a1645762eeff32e"
 dependencies = [
- "avr-device-macros 0.5.0 (git+https://github.com/marcantoinem/avr-device?rev=a6e1e2b8ddc03ed4e35d0bba7a1645762eeff32e)",
+ "avr-device-macros",
  "bare-metal",
  "cfg-if 1.0.0",
  "vcell",
-]
-
-[[package]]
-name = "avr-device-macros"
-version = "0.5.0"
-source = "git+https://github.com/marcantoinem/avr-device?rev=684d9afd63a26ad053a8c93bec959c2128d1c05e#684d9afd63a26ad053a8c93bec959c2128d1c05e"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -65,25 +35,9 @@ dependencies = [
 [[package]]
 name = "avr-hal-generic"
 version = "0.1.0"
-source = "git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2#42cc6b9414175ae443841125270efa4e127a97d2"
-dependencies = [
- "avr-device 0.5.0 (git+https://github.com/marcantoinem/avr-device?rev=684d9afd63a26ad053a8c93bec959c2128d1c05e)",
- "cfg-if 0.1.10",
- "embedded-hal",
- "embedded-storage",
- "nb 0.1.3",
- "paste",
- "rustversion",
- "ufmt",
- "void",
-]
-
-[[package]]
-name = "avr-hal-generic"
-version = "0.1.0"
 source = "git+https://github.com/marcantoinem/avr-hal?rev=b30015b6b05c1bde68277d002bb197f193895998#b30015b6b05c1bde68277d002bb197f193895998"
 dependencies = [
- "avr-device 0.5.0 (git+https://github.com/marcantoinem/avr-device?rev=a6e1e2b8ddc03ed4e35d0bba7a1645762eeff32e)",
+ "avr-device",
  "cfg-if 0.1.10",
  "embedded-hal",
  "embedded-storage",
@@ -132,8 +86,8 @@ checksum = "723dce4e9f25b6e6c5f35628e144794e5b459216ed7da97b7c4b66cdb3fa82ca"
 name = "inf1900-robot-hal"
 version = "0.1.0"
 dependencies = [
- "atmega-hal 0.1.0 (git+https://github.com/marcantoinem/avr-hal?rev=b30015b6b05c1bde68277d002bb197f193895998)",
- "avr-hal-generic 0.1.0 (git+https://github.com/marcantoinem/avr-hal?rev=b30015b6b05c1bde68277d002bb197f193895998)",
+ "atmega-hal",
+ "avr-hal-generic",
 ]
 
 [[package]]
@@ -208,8 +162,8 @@ dependencies = [
 name = "tptest-rust"
 version = "0.1.0"
 dependencies = [
- "atmega-hal 0.1.0 (git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2)",
- "avr-hal-generic 0.1.0 (git+https://github.com/marcantoinem/avr-hal?rev=42cc6b9414175ae443841125270efa4e127a97d2)",
+ "atmega-hal",
+ "avr-hal-generic",
  "inf1900-robot-hal",
  "panic-abort",
 ]

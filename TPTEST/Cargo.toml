@@ -22,12 +22,12 @@ panic-abort = "0.3.2"
 
 [dependencies.atmega-hal]
 git = "https://github.com/marcantoinem/avr-hal"
-rev = "42cc6b9414175ae443841125270efa4e127a97d2"
+rev = "b30015b6b05c1bde68277d002bb197f193895998"
 features = ["atmega324pa", "device-selected", "rt"]
 
 [dependencies.avr-hal-generic]
 git = "https://github.com/marcantoinem/avr-hal"
-rev = "42cc6b9414175ae443841125270efa4e127a97d2"
+rev = "b30015b6b05c1bde68277d002bb197f193895998"
 
 [dependencies.inf1900-robot-hal]
 path = "../inf1900-robot-hal"
