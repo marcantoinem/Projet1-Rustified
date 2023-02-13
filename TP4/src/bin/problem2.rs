@@ -74,7 +74,7 @@ fn problem2() -> ! {
     let mut pina0 = pins.pa0.into_output();
     let mut pina1 = pins.pa1.into_output();
 
-    delay.delay_ms(1000u16);
+    delay.delay_ms(10000u16);
     set_twoway_del(&mut pina0, &mut pina1, Color::Red);
     delay.delay_ms(100u16);
 
